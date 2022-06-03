@@ -1,0 +1,7 @@
+
+# Add enemy to grid within the size of the enemy 
+            # and if it is within the bounds of the grid
+            for i in range(enemy.size):
+                for j in range(enemy.size):
+                    if enemy.x + i < 1000 and enemy.y + j < 1000:
+                        self.grid[enemy.x + i][enemy.y + j] = enemy.type

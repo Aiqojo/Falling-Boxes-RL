@@ -1,16 +1,16 @@
 import gym
 from stable_baselines3 import PPO
-import os
+from dojenv import dojEnv
 
-models_dir = "models/PPO"
+models_dir = "models/Doj-PPO1"
 logdir = "logs"
 
 
-env = gym.make('LunarLander-v2')
+env = dojEnv()
 env.reset()
 
-models_dir = "models/PPO"
-models_path = f"{models_dir}/200000.zip"
+models_dir = "models/Doj-PPO1"
+models_path = f"{models_dir}/4950000.zip"
 
 model = PPO.load(models_path, env = env)
 
