@@ -3,6 +3,9 @@ import numpy as np
 
 env = dojEnv()
 episodes = 50
+# for i in range(10):
+#     print(env.observation_space.sample())
+
 
 for episode in range(episodes):
     observation = env.reset()

@@ -35,9 +35,10 @@ class dojEnv(gym.Env):
     return_array = np.zeros((board_size, board_size), dtype=np.uint8)
 
     def __init__(self):
+        # Move left, right, or stay still
         self.action_space = spaces.Discrete(3)
-        self.observation_space = spaces.Box(low=0, high=20, shape=(self.board_size, self.board_size),
-                                            dtype=np.uint8)
+         
+        self.observation_space = spaces.Box(low=0, high=20, shape=(self.board_size, self.board_size), dtype=np.uint8)
         self.done = False
         pygame.init()
         self.screen = pygame.display.set_mode((self.render_size, self.render_size))
@@ -62,7 +63,7 @@ class dojEnv(gym.Env):
         # If it wasn't a succcess because the agent tried moving out of bounds
         # lower its reward
         if not move_success:
-            self.reward += -50
+            self.reward += -5
 
         # Remove the enemies from the return array, reset the return array
         self.return_array = np.zeros((self.board_size, self.board_size), dtype=np.uint8)
@@ -124,7 +125,7 @@ class dojEnv(gym.Env):
         # Return the return_array and the reward
         # The reward will be 2 * the number of enemies that are alive
         # plus the natural log of the frames
-        self.reward += 1
+        #self.reward += 1
         return self.return_array, self.reward, self.done, {}
 
     def reset(self):

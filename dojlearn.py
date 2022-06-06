@@ -4,8 +4,8 @@ import os
 import time
 from dojenv import dojEnv
 
-models_dir = f"models/Doj-A2C1"
-logdir = f"logs/Doj-A2C1"
+models_dir = f"models/Doj-PPO11"
+logdir = f"logs/Doj-PPO11"
 
 if not os.path.exists(models_dir):
     os.makedirs(models_dir)
@@ -16,8 +16,8 @@ if not os.path.exists(logdir):
 env = dojEnv()
 env.reset()
 
-model = A2C('MlpPolicy', env, verbose=1, tensorboard_log=logdir)
-TIMESTEPS = 10000
+model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=logdir)
+TIMESTEPS = 25000
 for i in range(1,100000):
     model.learn(total_timesteps=TIMESTEPS, reset_num_timesteps=False, tb_log_name="PPO")
     model.save(f"{models_dir}/{TIMESTEPS*i}")
