@@ -1,11 +1,11 @@
 import gym
-from stable_baselines3 import PPO
+from stable_baselines3 import PPO, DQN, A2C
 import os
 import time
 from dojenv import dojEnv
 
-models_dir = f"models/Doj-PPO1"
-logdir = f"logs/Doj-PPO1"
+models_dir = f"models/Doj-A2C1"
+logdir = f"logs/Doj-A2C1"
 
 if not os.path.exists(models_dir):
     os.makedirs(models_dir)
@@ -16,7 +16,7 @@ if not os.path.exists(logdir):
 env = dojEnv()
 env.reset()
 
-model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=logdir)
+model = A2C('MlpPolicy', env, verbose=1, tensorboard_log=logdir)
 TIMESTEPS = 10000
 for i in range(1,100000):
     model.learn(total_timesteps=TIMESTEPS, reset_num_timesteps=False, tb_log_name="PPO")

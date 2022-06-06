@@ -1,17 +1,17 @@
 
 class Agent:
 
-    def __init__(self):
-        # The agent is a square with a size of 20x20)
-        self.size = 40
+    def __init__(self, board_size):
+        self.board_size = board_size
+        self.size = 1
 
         # x and y coords are top left corner of the agent
-        self.x = 500 - self.size/2
-        self.y = 1000 - self.size
+        self.x = board_size // 2
+        self.y = board_size - 1
         self.alive = True
-        self.move_speed = 5
+        self.move_speed = 1
         self.health = 100
-        self.type = -1
+        self.type = 1
     
     
     def move(self, direction):
@@ -50,32 +50,32 @@ class Agent:
         if self.x < 0:
             self.x = 0
             return False
-        if self.x > 1000 - self.size:
-            self.x = 1000 - self.size
+        if self.x >= self.board_size:
+            self.x = self.board_size - 1
             return False
-        if self.y < 800:
-            self.y = 800
+        # This is redundant cause it cant move up or down
+        if self.y < 1 - self.board_size//5:
+            self.y = self.board_size//5
             return False
-        if self.y > 1000 - self.size:
-            self.y = 1000 - self.size
+        if self.y >= self.board_size:
+            self.y = self.board_size - 1
             return False
         return True
 
     # checks the x and y coords to see if it is within the agents hitbox
     def check_collision(self, x, y, enemy_size):
+        
+        if x <= self.x < x + 1 and y <= self.y < y + 1:
+            return True
         # Checks all 4 corners of the agent is within the enemy hitbox
-        if self.x <= x + enemy_size and self.x >= x:
-            if self.y <= y + enemy_size and self.y >= y:
-                return True
-        if self.x + self.size <= x + enemy_size and self.x + self.size >= x:
-            if self.y <= y + enemy_size and self.y >= y:
-                return True
-        if self.x <= x + enemy_size and self.x >= x:
-            if self.y + self.size <= y + enemy_size and self.y + self.size >= y:
-                return True
-        if self.x + self.size <= x + enemy_size and self.x + self.size >= x:
-            if self.y + self.size <= y + enemy_size and self.y + self.size >= y:
-                return True
+        if x < self.x < x + enemy_size and y < self.y < y + enemy_size:
+            return True
+        if x < self.x + self.size < x + enemy_size and y < self.y < y + enemy_size:
+            return True
+        if x < self.x < x + enemy_size and y < self.y + self.size < y + enemy_size:
+            return True
+        if x < self.x + self.size < x + enemy_size and y < self.y + self.size < y + enemy_size:
+            return True
         return False
         
     # Returns False if dead and True if alive
