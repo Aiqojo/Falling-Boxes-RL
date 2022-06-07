@@ -10,8 +10,8 @@ logdir = "logs"
 env = dojEnv()
 env.reset()
 
-models_dir = "models/Doj-PPO11"
-models_path = f"{models_dir}/6325000.zip"
+models_dir = "models/Doj-PPO12"
+models_path = f"{models_dir}/26400000.zip"
 
 model = PPO.load(models_path, env = env)
 
@@ -26,8 +26,8 @@ for ep in range(episodes):
         env.render()
         action, _ = model.predict(obs)
         obs, reward, done, info = env.step(action)
-        print(np.fliplr(np.rot90(m=obs, k=3)))
-        print(reward)
+        #print(np.fliplr(np.rot90(m=obs, k=3)))
+        #print(reward)
     reward_array += [reward]
 
 env.close()
