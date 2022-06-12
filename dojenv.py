@@ -2,10 +2,13 @@ import time
 import numpy as np
 import pygame
 import Agent
-import Enemy
+from Enemy import Enemy
 import gym
 from gym import spaces
 
+# i dont think it properly knows how to dodge
+# when it dies if i update it reward one last time with a negative reward
+# it may learn that it should dodge
 
 class dojEnv(gym.Env):
     metadata = {'render.modes': ['human']}
@@ -14,7 +17,7 @@ class dojEnv(gym.Env):
     # This is how big the array will be when returned
     # It will be a square so if 20, np grid is 20x20
     # This is also used to scale the agent and enemies
-    board_size = 10
+    board_size = 20
 
     # Size of the render window
     render_size = 1000
@@ -23,22 +26,24 @@ class dojEnv(gym.Env):
     frame = 0
     # Could increase difficulty over time
     spawn_rate = 5
+    # Frames until the difficulty increases
+    diff_increase = 250
     # Default of the enemies
-    enemy_move_speed = .5
+    enemy_move_speed = 1
     ## Max amount of enemies
-    max_enemies = 7
+    max_enemies = 28
     # Store enemies in array
     enemies = []
     # The player is placed at the bottom middle of the map
     agent = Agent.Agent(board_size)
     # Create grid of 100x100 to store information about the environment
-    return_array = np.zeros((board_size, board_size), dtype=np.uint8)
+    return_array = np.zeros((board_size, board_size), dtype=np.float32)
 
     def __init__(self):
         # Move left, right, or stay still
         self.action_space = spaces.Discrete(3)
          
-        self.observation_space = spaces.Box(low=0, high=20, shape=(self.board_size, self.board_size), dtype=np.uint8)
+        self.observation_space = spaces.Box(low=0, high=3, shape=(self.board_size, self.board_size), dtype=np.float32)
         self.done = False
         pygame.init()
         self.screen = pygame.display.set_mode((self.render_size, self.render_size))
@@ -48,25 +53,28 @@ class dojEnv(gym.Env):
     # and moves all of the enemies
     def step(self, action_direction):
         time.sleep(self.delay)
+        #print(self.frame)
+
+        # Decrease spawn rate every diff_increase frames
+        if self.frame % self.diff_increase == 0 and self.spawn_rate > 1 and self.frame != 0:
+            self.spawn_rate -= 1
 
         # Randomly spawns enemies based on how many are already spawned
         if len(self.enemies) < self.max_enemies:
             if self.frame == 0:
-                self.enemies.append(Enemy.Enemy(
-                    self.enemy_move_speed, self.board_size))
+                self.enemies.append(Enemy(self.enemy_move_speed, self.board_size))
             if self.frame % self.spawn_rate == 0:
-                self.enemies.append(Enemy.Enemy(
-                    self.enemy_move_speed, self.board_size))
+                self.enemies.append(Enemy(self.enemy_move_speed, self.board_size))
 
         # Move the agent
         move_success = self.agent.move(action_direction)
         # If it wasn't a succcess because the agent tried moving out of bounds
         # lower its reward
         if not move_success:
-            self.reward += -5
+            self.reward += -500
 
         # Remove the enemies from the return array, reset the return array
-        self.return_array = np.zeros((self.board_size, self.board_size), dtype=np.uint8)
+        self.return_array = np.zeros((self.board_size, self.board_size), dtype=np.float32)
 
         # Move the enemies
         for enemy in self.enemies:
@@ -101,7 +109,7 @@ class dojEnv(gym.Env):
                         for j in range(self.agent.size):
                             self.return_array[int(
                                 self.agent.x + i)][int(self.agent.y + j)] = self.agent.type
-                    self.reward += int(-1000/self.frame)
+                    #self.reward += int(-1000/self.frame)
                     return self.return_array, self.reward, self.done, {}
 
             # Add the enemy to the observation array
@@ -135,7 +143,7 @@ class dojEnv(gym.Env):
         self.agent = Agent.Agent(self.board_size)
         self.enemies = []
 
-        return_array = np.zeros((self.board_size, self.board_size), dtype=np.uint8)
+        return_array = np.zeros((self.board_size, self.board_size), dtype=np.float32)
         return return_array
 
     def render(self, mode='human'):
