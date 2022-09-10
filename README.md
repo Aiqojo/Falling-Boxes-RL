@@ -2,6 +2,8 @@
 
 ![Gif](https://imgur.com/u6R0XAF.gif)
 
+Visualization created with pygame.
+
 ## Environment:
 
 All of this takes place on a numpy grid, the example above being a 10x10 one. It is initialized with all 0s. Every 2 frames a green box is chosen to appear randomly along the grid at the top, and each box moves down 1 row every frame. These are represented with 1s in the array, and the agent is represented by a 2.
