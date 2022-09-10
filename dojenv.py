@@ -17,7 +17,7 @@ class dojEnv(gym.Env):
     # This is how big the array will be when returned
     # It will be a square so if 20, np grid is 20x20
     # This is also used to scale the agent and enemies
-    board_size = 20
+    board_size = 10
 
     # Size of the render window
     render_size = 1000
@@ -25,13 +25,13 @@ class dojEnv(gym.Env):
     # Frame count used to spawn enemies
     frame = 0
     # Could increase difficulty over time
-    spawn_rate = 5
+    spawn_rate = 2
     # Frames until the difficulty increases
-    diff_increase = 250
+    diff_increase = 10000
     # Default of the enemies
     enemy_move_speed = 1
     ## Max amount of enemies
-    max_enemies = 28
+    max_enemies = 14
     # Store enemies in array
     enemies = []
     # The player is placed at the bottom middle of the map
@@ -71,7 +71,7 @@ class dojEnv(gym.Env):
         # If it wasn't a succcess because the agent tried moving out of bounds
         # lower its reward
         if not move_success:
-            self.reward += -500
+            self.reward += -0
 
         # Remove the enemies from the return array, reset the return array
         self.return_array = np.zeros((self.board_size, self.board_size), dtype=np.float32)
