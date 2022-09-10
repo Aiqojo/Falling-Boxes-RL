@@ -6,10 +6,10 @@ from dojenv import dojEnv
 
 load = False
 
-models_dir = f"models/DojB-PPO3"
-logdir = f"logs/DojB-PPO3"
+models_dir = f"models/DojB-PPO5"
+logdir = f"logs/DojB-PPO5"
 
-models_path = f"{models_dir}/44100000.zip"
+models_path = f"{models_dir}/1025000.zip"
 
 if not os.path.exists(models_dir):
     os.makedirs(models_dir)

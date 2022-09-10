@@ -4,14 +4,16 @@ from dojenv import dojEnv
 import time
 import numpy as np
 
+# load tensorboard to find best performing
+
 logdir = "logs"
 
 
 env = dojEnv()
 env.reset()
 
-models_dir = "models/DojB-PPO2"
-models_path = f"{models_dir}/875000.zip"
+models_dir = "models/DojB-PPO4"
+models_path = f"{models_dir}/1375000.zip"
 
 model = PPO.load(models_path, env = env)
 
@@ -22,7 +24,7 @@ for ep in range(episodes):
     obs = env.reset()
     done = False
     while not done:
-        time.sleep(.01)
+        time.sleep(.05)
         env.render()
         action, _ = model.predict(obs)
         obs, reward, done, info = env.step(action)
