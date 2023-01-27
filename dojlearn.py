@@ -20,13 +20,12 @@ if not os.path.exists(logdir):
 env = dojEnv()
 env.reset()
 
-model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=logdir)
-#model = PPO.load(models_path, env = env)
+model = PPO("MlpPolicy", env, verbose=1, tensorboard_log=logdir)
+# model = PPO.load(models_path, env = env)
 TIMESTEPS = 25000
-for i in range(1,100000):
+for i in range(1, 100000):
     model.learn(total_timesteps=TIMESTEPS, reset_num_timesteps=False, tb_log_name="PPO")
     model.save(f"{models_dir}/{TIMESTEPS*i}")
-
 
     if load:
         env_load = dojEnv()
@@ -34,7 +33,7 @@ for i in range(1,100000):
 
         load_path = f"{models_dir}/{TIMESTEPS*i}.zip"
 
-        model = PPO.load(load_path, env = env_load)
+        model = PPO.load(load_path, env=env_load)
 
         reward_array = []
 
@@ -43,11 +42,11 @@ for i in range(1,100000):
             obs = env_load.reset()
             done = False
             while not done:
-                time.sleep(.02)
+                time.sleep(0.02)
                 env_load.render()
                 action, _ = model.predict(obs)
                 obs, reward, done, info = env_load.step(action)
-                #print(np.fliplr(np.rot90(m=obs, k=3)))
+                # print(np.fliplr(np.rot90(m=obs, k=3)))
                 print(reward)
             reward_array += [reward]
 
@@ -55,8 +54,3 @@ for i in range(1,100000):
 
 
 env.close()
-
-
-
-
-
